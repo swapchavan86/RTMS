@@ -1,0 +1,127 @@
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.App-header {
+  background-color: #282c34;
+  padding: 20px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.App-main-container {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+}
+
+.App-left-column {
+  flex: 3; /* Takes 3/4 of the space */
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between items in this column */
+  padding-right: 10px; /* Space between left and right columns */
+}
+
+.App-right-column {
+  flex: 1; /* Takes 1/4 of the space */
+  padding-left: 10px; /* Space between left and right columns */
+}
+
+.dashboard-section {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.dashboard-section h2 {
+  margin-top: 0;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+/* Placeholder for graph containers if needed */
+.graph-container {
+  width: 100%;
+  max-width: 600px; /* Adjust as needed */
+  margin: 20px auto; /* Center graph if it's in its own section */
+}
+
+/* Leaderboard specific styling */
+.leaderboard-list {
+  list-style: none;
+  padding: 0;
+}
+
+.leaderboard-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.leaderboard-list li:last-child {
+  border-bottom: none;
+}
+
+.leaderboard-list .employee-name {
+  font-weight: bold;
+}
+
+.leaderboard-list .awe-points {
+  color: #007bff; /* A nice blue for points */
+}
+
+/* Seating chart placeholder styling */
+.seating-chart {
+  display: grid;
+  /* Example: grid-template-columns: repeat(10, 1fr); for a 10-column grid */
+  gap: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  max-width: fit-content; /* Adjust to content size */
+  margin: auto; /* Center the chart */
+}
+
+.seat {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8em;
+  background-color: #e0e0e0; /* Default for empty */
+}
+
+.seat.occupied {
+  background-color: #4CAF50; /* Green for occupied */
+  color: white;
+}
+
+.seat.unoccupied {
+  background-color: #f0f0f0; /* Lighter grey for unoccupied */
+}
+
+.seat.suggested {
+  background-color: #ffeb3b; /* Yellow for suggested */
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 235, 59, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 235, 59, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 235, 59, 0);
+  }
+}

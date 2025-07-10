@@ -1,0 +1,34 @@
+[
+  {
+    "timestamp": "2023-10-27T10:00:00Z",
+    "office_zone": "A1",
+    "temperature_celsius": 22.5,
+    "humidity_percent": 45.0,
+    "light_status": "ON",
+    "light_level_lux": 300,
+    "ac_status": "ON",
+    "ac_setpoint_celsius": 23,
+    "projector_status": "OFF",
+    "energy_consumption_kwh_hourly": 1.5
+  },
+  {
+    "timestamp": "2023-10-27T10:00:00Z",
+    "office_zone": "B2",
+    "temperature_celsius": 23.0,
+    "humidity_percent": 48.0,
+    "light_status": "ON",
+    "light_level_lux": 350,
+    "ac_status": "ON",
+    "ac_setpoint_celsius": 23,
+    "projector_status": "ON",
+    "energy_consumption_kwh_hourly": 2.1
+  },
+  {
+    "timestamp": "2023-10-27T10:00:00Z",
+    "employee_id": "emp001",
+    "laptop_status": "ON",
+    "laptop_mode": "Light Mode",
+    "laptop_cpu_usage_percent": 30,
+    "laptop_session_hours": 2.5
+  }
+]
