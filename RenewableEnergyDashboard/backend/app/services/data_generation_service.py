@@ -3,8 +3,8 @@ import uuid
 from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional
 
-from ..models.employee_models import Employee, LaptopMode
-from ..models.energy_models import LightState, HvacStatus, ProjectorUsage
+from ..models.employee_models import Employee
+from ..models.energy_models import LightState, HvacStatus, ProjectorUsage, LaptopMode # LaptopMode moved here
 from ..models.seating_models import SeatStatus, Seat
 
 # Configuration for mock data generation
@@ -322,3 +322,4 @@ def get_mock_seating_suggestions() -> Dict[str, Any]:
 if not USE_DATABASE_SWITCH:
     get_mock_employees()
     get_mock_seating_arrangement_and_assign_employees()
+```

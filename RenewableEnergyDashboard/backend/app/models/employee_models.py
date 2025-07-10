@@ -14,9 +14,7 @@ class Employee(EmployeeBase):
     awe_points: int = Field(0, example=120)
 
     class Config:
-        orm_mode = True # For potential future SQLAlchemy integration
-        # In Pydantic v2, orm_mode is replaced by from_attributes = True
-        # from_attributes = True # Uncomment for Pydantic v2 if using ORM features
+        from_attributes = True # Replaced orm_mode for Pydantic v2 compatibility
 
 class LeaderboardEntry(BaseModel):
     rank: int
@@ -24,3 +22,4 @@ class LeaderboardEntry(BaseModel):
     name: str
     awe_points: int
     department: Optional[str] = None
+```
