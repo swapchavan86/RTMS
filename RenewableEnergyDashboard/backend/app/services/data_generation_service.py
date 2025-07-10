@@ -322,4 +322,3 @@ def get_mock_seating_suggestions() -> Dict[str, Any]:
 if not USE_DATABASE_SWITCH:
     get_mock_employees()
     get_mock_seating_arrangement_and_assign_employees()
-```

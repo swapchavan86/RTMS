@@ -22,4 +22,3 @@ class LeaderboardEntry(BaseModel):
     name: str
     awe_points: int
     department: Optional[str] = None
-```

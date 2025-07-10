@@ -52,4 +52,3 @@ async def get_seating_suggestions_data(service = Depends(get_data_service)):
 #         else:
 #             raise HTTPException(status_code=404, detail=f"Seat {seat_id} not found or update failed.")
 #     pass
-```
