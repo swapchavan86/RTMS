@@ -1,6 +1,7 @@
 from enum import Enum
 from pydantic import BaseModel, Field
 from typing import List, Optional, Tuple
+from enum import Enum # Ensure this line is definitely here
 
 class SeatStatus(str, Enum):
     OCCUPIED = "occupied"
@@ -33,4 +34,8 @@ class SeatingSuggestion(BaseModel):
     suggested_moves: List[Tuple[str, str]] = Field(default_factory=list) # List of (employee_id, new_seat_id)
     estimated_energy_saving_kwh: Optional[float] = None
     vacated_zones_lights_off: List[str] = Field(default_factory=list) # Zones where lights can be turned off
+<<<<<<< HEAD
     vacated_zones_ac_off: List[str] = Field(default_factory=list) # Zones where AC can be turned off
+=======
+    vacated_zones_ac_off: List[str] = Field(default_factory=list) # Zones where AC can be turned off
+>>>>>>> 04f69453b72aad6f0edbd33ec63f2ad9b2d58920
