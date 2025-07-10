@@ -44,7 +44,7 @@ async def get_hvac_status_data(service = Depends(get_data_service)):
     Retrieve mock data for HVAC (Air Conditioning/Heating) status in different office zones.
     """
     if service.USE_DATABASE_SWITCH:
-        raise HTTPException(status_code=501, detail="Database connection not implemented yet.")
+        raise HTTPException(status_code=501, detail="Database connection not implemented. This is a test of a longer line that might cause issues with the diffing algorithm if not handled carefully by the model generating the diff and ensuring it is properly formatted for the tool.")
     else:
         raw_data = service.get_mock_hvac_status()
         # Manually create HvacZone objects
