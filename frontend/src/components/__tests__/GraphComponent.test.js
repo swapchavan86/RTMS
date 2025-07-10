@@ -116,5 +116,72 @@ describe('GraphComponent', () => {
     const passedProps = BarMock.mock.calls[0][0];
     expect(passedProps.options.plugins.title.display).toBe(false);
   });
+
+  test('renders loading state when loading prop is true', () => {
+    render(<GraphComponent loading={true} title="Loading Chart" />);
+    expect(screen.getByText(/Loading chart data.../i)).toBeInTheDocument();
+    // Ensure no chart is rendered
+    expect(screen.queryByTestId('bar-chart-mock')).not.toBeInTheDocument();
+  });
+
+  test('renders error state when error prop is provided', () => {
+    render(<GraphComponent error="Network Error" title="Error Chart" />);
+    expect(screen.getByText(/Failed to load chart/i)).toBeInTheDocument();
+    expect(screen.getByText(/Network Error/i)).toBeInTheDocument();
+    // Ensure no chart is rendered
+    expect(screen.queryByTestId('bar-chart-mock')).not.toBeInTheDocument();
+  });
+
+  test('renders nothing (or a specific message if implemented) if data is null/undefined and not loading/error', () => {
+    const { container } = render(<GraphComponent data={null} title="Empty Chart" />);
+    // The component currently returns null if !enhancedData, so chart mocks shouldn't be called.
+    expect(screen.queryByTestId('bar-chart-mock')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('line-chart-mock')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('pie-chart-mock')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('doughnut-chart-mock')).not.toBeInTheDocument();
+    // Check if the container is empty or has a specific placeholder if that's the behavior
+    // For now, we expect it to not render a chart. If it rendered a "no data" message, we'd test for that.
+    // The component's renderChart returns null if !enhancedData, so the graph-container would be empty of charts.
+  });
+
+  test('renders chart type controls when showControls is true and allows type change', () => {
+    const handleChartTypeChange = jest.fn();
+    render(
+      <GraphComponent
+        data={mockData}
+        options={mockOptions}
+        title="Controllable Chart"
+        showControls={true}
+        onChartTypeChange={handleChartTypeChange}
+      />
+    );
+
+    // Check if controls are rendered
+    expect(screen.getByRole('button', { name: /📊 Bar/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /📈 Line/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /🥧 Pie/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /🍩 Doughnut/i })).toBeInTheDocument();
+
+    // Default is Bar
+    expect(require('react-chartjs-2').Bar).toHaveBeenCalledTimes(1);
+    expect(require('react-chartjs-2').Line).not.toHaveBeenCalled();
+
+    // Click Line button
+    screen.getByRole('button', { name: /📈 Line/i }).click();
+
+    // Check if Line chart is now rendered (mock should be called again)
+    // Note: Since we mock the chart components, we check if the mock was called.
+    // The actual DOM update to show 'line-chart-mock' depends on how state updates trigger re-renders
+    // and if the mock components themselves are stateful or just placeholders.
+    // For this test, we'll assume clicking updates internal state and attempts to render the new type.
+    expect(require('react-chartjs-2').Line).toHaveBeenCalledTimes(1);
+    expect(handleChartTypeChange).toHaveBeenCalledWith('line');
+
+    // Click Pie button
+    screen.getByRole('button', { name: /🥧 Pie/i }).click();
+    expect(require('react-chartjs-2').Pie).toHaveBeenCalledTimes(1);
+    expect(handleChartTypeChange).toHaveBeenCalledWith('pie');
+  });
+
 });
 ```

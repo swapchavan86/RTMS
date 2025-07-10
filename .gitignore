@@ -1,10 +1,109 @@
-# Logs
-logs
-*.log
+# Python
+## Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+## C extensions
+*.so
+
+## Distribution / packaging
+.Python
+build/
+develop-eggs/
+# dist/ # Covered by Node section as well
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+## PyInstaller
+#  Usually these files are written by a PyInstaller script; this is targeted
+#  at preserving the MANIFEST.in file if PyInstaller is used inside that
+#  project directory
+*.manifest
+*.spec
+
+## Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+## Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+# .cache # Covered by Node/Gatsby section
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+pytestdebug.log
+
+## Celery files
+celerybeat-schedule
+celerybeat.pid
+
+## SageMath files
+*.sage.py
+
+## Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+## Spyder project settings
+.spyderproject
+.spyproject
+
+## Rope project settings
+.ropeproject
+
+## mkdocs documentation
+/site
+
+## mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+## Jupyter Notebook
+.ipynb_checkpoints
+
+# Node.js / React / General Frontend
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+# package-lock.json # Usually committed, but can be ignored in some strategies
+# yarn.lock # Same as package-lock.json
+
+# Build outputs
+build/ # Create React App build output & Python build
+dist/ # Common build output directory & Python dist
+
+# Logs
+logs
+*.log
+# Duplicates from Python's npm-debug.log* etc. are fine
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
@@ -35,10 +134,10 @@ bower_components
 .lock-wscript
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
+# build/Release # Covered by build/
 
 # Dependency directories
-node_modules/
+# node_modules/ # Already listed
 jspm_packages/
 
 # Snowpack dependency directory (https://snowpack.dev/)
@@ -66,12 +165,17 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
-.env
+# .env # Already listed under Python environments
 .env.*
 !.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
 
 # parcel-bundler cache (https://parceljs.org/)
-.cache
+.cache # Also used by pytest
 .parcel-cache
 
 # Next.js build output
@@ -80,10 +184,10 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+# dist # Already listed
 
 # Gatsby files
-.cache/
+# .cache/ # Already listed
 # Comment in the public line in if your project uses Gatsby and not Next.js
 # https://nextjs.org/blog/next-9-1#public-directory-support
 # public
@@ -93,7 +197,7 @@ dist
 
 # vuepress v2.x temp and cache directory
 .temp
-.cache
+# .cache # Already listed
 
 # Sveltekit cache directory
 .svelte-kit/
@@ -137,3 +241,74 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# IDE / Editor specific
+.vscode/
+.idea/
+*.project
+*.classpath
+*.cproject
+*.launch
+*.settings
+*.tmproj
+*.sublime-workspace
+*.sublime-project
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Other (from original RenewableEnergyDashboard/.gitignore that might not be covered)
+# These were already covered by broader patterns or specific ones above:
+# develop-eggs/ -> covered by python distribution
+# lib/ -> covered by python distribution
+# lib64/ -> covered by python distribution
+# var/ -> covered by python distribution
+# wheels/ -> covered by python distribution
+# share/python-wheels/ -> covered by python distribution
+# *.egg-info/ -> covered by python distribution
+# .installed.cfg -> covered by python distribution
+# *.egg -> covered by python distribution
+# MANIFEST -> covered by python distribution
+# htmlcov/ -> covered by python unit test
+# .tox/ -> covered by python unit test
+# .nox/ -> covered by python unit test
+# .coverage -> covered by python unit test
+# .coverage.* -> covered by python unit test
+# nosetests.xml -> covered by python unit test
+# coverage.xml -> covered by python unit test
+# *.cover -> covered by python unit test
+# *.py,cover -> covered by python unit test
+# .hypothesis/ -> covered by python unit test
+# .pytest_cache/ -> covered by python unit test
+# pytestdebug.log -> covered by python unit test
+# celerybeat-schedule -> covered by python celery
+# celerybeat.pid -> covered by python celery
+# .env -> covered by python environments
+# .venv -> covered by python environments
+# env/ -> covered by python environments
+# venv/ -> covered by python environments
+# ENV/ -> covered by python environments
+# env.bak/ -> covered by python environments
+# venv.bak/ -> covered by python environments
+# /site -> mkdocs documentation (Python)
+# .mypy_cache/ -> mypy (Python)
+# .dmypy.json -> mypy (Python)
+# dmypy.json -> mypy (Python)
+# .ipynb_checkpoints -> Jupyter (Python)
+# node_modules/ -> Node.js
+# npm-debug.log* -> Node.js logs
+# yarn-debug.log* -> Node.js logs
+# yarn-error.log* -> Node.js logs
+# build/ -> Node.js / React build output
+# dist/ -> Node.js common build output
+# .env.local -> Other (dotenv)
+# .env.development.local -> Other (dotenv)
+# .env.test.local -> Other (dotenv)
+# .env.production.local -> Other (dotenv)

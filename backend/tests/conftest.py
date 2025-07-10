@@ -7,8 +7,8 @@ from unittest.mock import patch, MagicMock
 from ..app.main import app
 # Import the service that will be mocked
 from ..app.services import data_generation_service as actual_data_service
-from ..app.models.employee_models import Employee, LeaderboardEntry, LaptopMode
-from ..app.models.energy_models import LightingZone, LightState, HvacZone, HvacStatus, LaptopUsage
+from ..app.models.employee_models import Employee, LeaderboardEntry
+from ..app.models.energy_models import LightingZone, LightState, HvacZone, HvacStatus, LaptopUsage, LaptopMode
 from ..app.models.seating_models import SeatingArrangement, SeatingSuggestion, SeatingZone, Seat, SeatStatus
 
 
@@ -87,9 +87,9 @@ def mock_data_service():
     # then you patch `your_app.routes.some_route_module.data_generation_service`.
 
     patches = [
-        patch('RenewableEnergyDashboard.backend.app.routes.employees_routes.data_generation_service', mock_service),
-        patch('RenewableEnergyDashboard.backend.app.routes.energy_routes.data_generation_service', mock_service),
-        patch('RenewableEnergyDashboard.backend.app.routes.seating_routes.data_generation_service', mock_service)
+        patch('backend.app.routes.employees_routes.data_generation_service', mock_service),
+        patch('backend.app.routes.energy_routes.data_generation_service', mock_service),
+        patch('backend.app.routes.seating_routes.data_generation_service', mock_service)
     ]
 
     for p in patches:
@@ -99,5 +99,3 @@ def mock_data_service():
 
     for p in patches:
         p.stop()
-
-```

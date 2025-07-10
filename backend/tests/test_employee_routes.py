@@ -97,4 +97,75 @@ def test_read_employees_db_switch_scenario(client: TestClient, mock_data_service
 
     # Reset for other tests if the mock_data_service is function-scoped and reused
     mock_data_service.USE_DATABASE_SWITCH = False
+
+def test_get_leaderboard_empty_if_no_employees(client: TestClient, mock_data_service: MagicMock):
+    """Test leaderboard returns empty list when no employees are available."""
+    mock_data_service.get_mock_leaderboard.return_value = []
+    response = client.get("/api/employees/leaderboard/")
+    assert response.status_code == 200
+    json_response = response.json()
+    assert isinstance(json_response, list)
+    assert len(json_response) == 0
+    mock_data_service.get_mock_leaderboard.assert_called_once()
+
+def test_get_employee_profile_check_data_structure(client: TestClient, mock_data_service: MagicMock):
+    """Test the data structure of a successfully retrieved employee profile."""
+    # Using default mock data from conftest for emp001
+    response = client.get("/api/employees/emp001")
+    assert response.status_code == 200
+    json_response = response.json()
+
+    expected_keys = ["id", "name", "department", "awe_points", "current_seat_id"]
+    for key in expected_keys:
+        assert key in json_response
+
+    assert json_response["id"] == "emp001"
+    assert isinstance(json_response["name"], str)
+    assert isinstance(json_response["department"], str)
+    assert isinstance(json_response["awe_points"], int)
+    # current_seat_id can be str or None
+    assert isinstance(json_response["current_seat_id"], (str, type(None)))
+
+
+def test_get_leaderboard_check_data_structure(client: TestClient, mock_data_service: MagicMock):
+    """Test the data structure of a successfully retrieved leaderboard."""
+    # Using default mock data from conftest
+    response = client.get("/api/employees/leaderboard/")
+    assert response.status_code == 200
+    json_response = response.json()
+
+    assert isinstance(json_response, list)
+    if len(json_response) > 0:
+        entry = json_response[0]
+        expected_keys = ["rank", "employee_id", "name", "awe_points", "department"]
+        for key in expected_keys:
+            assert key in entry
+
+        assert isinstance(entry["rank"], int)
+        assert isinstance(entry["employee_id"], str)
+        assert isinstance(entry["name"], str)
+        assert isinstance(entry["awe_points"], int)
+        assert isinstance(entry["department"], str)
+
+def test_read_employees_empty_if_no_data(client: TestClient, mock_data_service: MagicMock):
+    """Test /api/employees/ returns empty list when no employee data is available."""
+    mock_data_service.get_mock_employees.return_value = []
+    response = client.get("/api/employees/")
+    assert response.status_code == 200
+    json_response = response.json()
+    assert isinstance(json_response, list)
+    assert len(json_response) == 0
+    mock_data_service.get_mock_employees.assert_called_once()
+
+def test_read_employee_by_id_internal_error_if_service_fails(client: TestClient, mock_data_service: MagicMock):
+    """Test 500 error if the data service fails unexpectedly during single employee fetch."""
+    mock_data_service.get_mock_employees.side_effect = Exception("Unexpected service error")
+    response = client.get("/api/employees/emp001")
+    # Note: FastAPI's default behavior for unhandled exceptions is a 500 error.
+    # If specific exception handling is added to the route, this test would need adjustment.
+    assert response.status_code == 500
+    # The actual error message might vary based on FastAPI/Starlette version and debug settings.
+    # For now, checking the status code is sufficient.
+    # assert "Internal Server Error" in response.text # This can be too specific
+    mock_data_service.get_mock_employees.assert_called_once()
 ```
