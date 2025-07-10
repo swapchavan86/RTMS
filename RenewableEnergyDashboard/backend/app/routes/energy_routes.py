@@ -5,6 +5,7 @@ from typing import List, Dict, Any
 from ..models.energy_models import LaptopUsage, LightingZone, HvacZone # Add more as needed
 from ..services import data_generation_service
 
+print("DEBUG: Loading energy_routes.py")
 router = APIRouter()
 
 def get_data_service():
@@ -16,6 +17,7 @@ async def get_laptop_usage_data(service = Depends(get_data_service)):
     Retrieve mock data for laptop usage across employees.
     Includes hours on and light/dark mode.
     """
+    print("DEBUG: energy_routes.py - /laptop-usage/ route called")
     if service.USE_DATABASE_SWITCH:
         raise HTTPException(status_code=501, detail="Database connection not implemented yet.")
     else:

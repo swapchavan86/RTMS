@@ -57,4 +57,3 @@ export const getSeatingSuggestions = () => {
 // };
 
 export default apiClient;
-```

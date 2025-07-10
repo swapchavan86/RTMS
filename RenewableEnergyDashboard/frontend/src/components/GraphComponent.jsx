@@ -72,4 +72,3 @@ const GraphComponent = ({ type = 'bar', data, options, title }) => {
 };
 
 export default GraphComponent;
-```

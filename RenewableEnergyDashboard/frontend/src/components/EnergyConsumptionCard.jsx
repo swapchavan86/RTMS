@@ -28,4 +28,3 @@ const EnergyConsumptionCard = ({ title, data, unit, children }) => {
 };
 
 export default EnergyConsumptionCard;
-```

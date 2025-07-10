@@ -4,6 +4,7 @@ from typing import Dict, Any # Changed from List to Dict for top-level structure
 from ..models.seating_models import SeatingArrangement, SeatingSuggestion #, SeatingZone, Seat
 from ..services import data_generation_service
 
+print("DEBUG: Loading seating_routes.py")
 router = APIRouter()
 
 def get_data_service():
@@ -15,6 +16,7 @@ async def get_seating_arrangement_data(service = Depends(get_data_service)):
     Retrieve the current mock seating arrangement for the office,
     including zone details, seat statuses, and occupancy counts.
     """
+    print("DEBUG: seating_routes.py - /arrangement/ route called")
     if service.USE_DATABASE_SWITCH:
         raise HTTPException(status_code=501, detail="Database connection not implemented yet.")
     else:

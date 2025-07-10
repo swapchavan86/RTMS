@@ -107,4 +107,3 @@ const SeatingChart = () => {
 };
 
 export default SeatingChart;
-```

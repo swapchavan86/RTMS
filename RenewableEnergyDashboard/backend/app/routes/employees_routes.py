@@ -4,6 +4,7 @@ from typing import List
 from ..models.employee_models import Employee, LeaderboardEntry
 from ..services import data_generation_service # Using the new service
 
+print("DEBUG: Loading employees_routes.py")
 router = APIRouter()
 
 # Dependency to get the data generation service (though it's globally managed for now)
@@ -18,6 +19,7 @@ async def read_employees(skip: int = 0, limit: int = 100, service = Depends(get_
     Retrieve a list of all employees.
     Supports pagination via `skip` and `limit` query parameters.
     """
+    print(f"DEBUG: employees_routes.py - / route called (skip={skip}, limit={limit})")
     if service.USE_DATABASE_SWITCH:
         # Replace with actual database query and logic
         raise HTTPException(status_code=501, detail="Database connection not implemented yet.")
