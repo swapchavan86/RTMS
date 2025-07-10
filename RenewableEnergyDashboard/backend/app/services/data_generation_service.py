@@ -62,11 +62,11 @@ def get_mock_employees(refresh: bool = False) -> List[Employee]:
 _generated_zones_seats: Dict[str, List[Seat]] = {}  # zone_id -> List[Seat]
 
 def get_mock_seating_arrangement_and_assign_employees(refresh: bool = False) -> Dict[str, Any]:
+    global _generated_zones_seats, _employee_seat_map # Moved to the top
+
     if USE_DATABASE_SWITCH and _generated_zones_seats and not refresh:
         # In a real DB scenario, this would fetch fresh data
         pass # For mock, allow regeneration if refresh is true
-
-    global _generated_zones_seats, _employee_seat_map
 
     # Refresh employees to ensure they are available for seating assignment
     employees_list = get_mock_employees(refresh=refresh)
@@ -322,3 +322,4 @@ def get_mock_seating_suggestions() -> Dict[str, Any]:
 if not USE_DATABASE_SWITCH:
     get_mock_employees()
     get_mock_seating_arrangement_and_assign_employees()
+```
