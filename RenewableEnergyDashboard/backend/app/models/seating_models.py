@@ -38,4 +38,3 @@ class SeatingSuggestion(BaseModel):
     vacated_zones_ac_off: List[str] = Field(default_factory=list) # Zones where AC can be turned off
 =======
     vacated_zones_ac_off: List[str] = Field(default_factory=list) # Zones where AC can be turned off
->>>>>>> 04f69453b72aad6f0edbd33ec63f2ad9b2d58920
