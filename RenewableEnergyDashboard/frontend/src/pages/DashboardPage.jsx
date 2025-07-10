@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Leaderboard from '../components/Leaderboard';
 import EnergyConsumptionCard from '../components/EnergyConsumptionCard';
 import SeatingChart from '../components/SeatingChart';
-import GraphComponent from '../components/GraphComponent'; // Import the GraphComponent
+import GraphComponent from '../components/GraphComponent';
 
 import {
     getLaptopUsage,
     getLightingStatus,
     getHvacStatus
 } from '../services/api';
-
-// import './DashboardPage.css'; // Styles are primarily in App.css
 
 const DashboardPage = () => {
   const [laptopData, setLaptopData] = useState([]);
@@ -91,9 +89,9 @@ const DashboardPage = () => {
                 hvacData.filter(d => d.status === 'OFF').length,
             ],
             backgroundColor: [
-                'rgba(255, 99, 132, 0.5)',  // ON - Reddish
-                'rgba(75, 192, 192, 0.5)', // ECO - Greenish/Teal
-                'rgba(201, 203, 207, 0.5)'  // OFF - Grey
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(75, 192, 192, 0.5)',
+                'rgba(201, 203, 207, 0.5)'
             ],
             borderColor: [
                 'rgba(255, 99, 132, 1)',
@@ -105,110 +103,164 @@ const DashboardPage = () => {
     ],
   };
 
-
   if (loading) {
-    return <div className="loading-message">Loading Dashboard Data... Please wait.</div>;
+    return (
+      <div className="dashboard-section loading-shimmer" style={{
+        padding: 'var(--spacing-xl)',
+        margin: 'var(--spacing-xl)',
+        borderRadius: 'var(--border-radius-xl)',
+        height: '200px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        Loading Dashboard Data... Please wait.
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="error-message">Error loading dashboard: {error}</div>;
+    return (
+      <div className="dashboard-section" style={{
+        background: 'linear-gradient(135deg, #fee2e2, #fecaca)',
+        borderLeft: '4px solid var(--error-color)',
+        padding: 'var(--spacing-xl)',
+        margin: 'var(--spacing-xl)',
+        borderRadius: 'var(--border-radius-xl)'
+      }}>
+        Error loading dashboard: {error}
+      </div>
+    );
   }
 
   return (
     <div className="App-main-container">
       <div className="App-left-column">
         {/* Laptop Usage Section */}
-        <EnergyConsumptionCard title="💻 Laptop Usage Stats">
-          <p>Total Laptops Tracked: {laptopData.length}</p>
-          <p>Average Hours On: {(laptopData.reduce((acc, curr) => acc + curr.hours_on, 0) / (laptopData.length || 1)).toFixed(1)} hrs</p>
-          {laptopData.length > 0 && <GraphComponent type="pie" data={laptopUsageModeData} title="Laptop UI Modes" />}
+        <EnergyConsumptionCard title="💻 Laptop Usage Stats" className="dashboard-section">
+          <div className="energy-item">
+            <span className="item-name">Total Laptops Tracked:</span>
+            <span className="item-value">{laptopData.length}</span>
+          </div>
+          <div className="energy-item">
+            <span className="item-name">Average Hours On:</span>
+            <span className="item-value">
+              {(laptopData.reduce((acc, curr) => acc + curr.hours_on, 0) / (laptopData.length || 1)).toFixed(1)} hrs
+            </span>
+          </div>
+          {laptopData.length > 0 && (
+            <div className="graph-container">
+              <GraphComponent type="pie" data={laptopUsageModeData} title="Laptop UI Modes" />
+            </div>
+          )}
         </EnergyConsumptionCard>
 
         {/* Lighting Section */}
-        <EnergyConsumptionCard title="💡 Lighting Status">
-          <p>Total Lighting Zones Tracked: {lightingData.length}</p>
-          <p>Zones with Lights ON: {lightingData.filter(d => d.status === 'ON').length}</p>
-          {lightingData.length > 0 && <GraphComponent type="doughnut" data={lightingStatusData} title="Lighting Zone Status" />}
+        <EnergyConsumptionCard title="💡 Lighting Status" className="dashboard-section">
+          <div className="energy-item">
+            <span className="item-name">Total Lighting Zones Tracked:</span>
+            <span className="item-value">{lightingData.length}</span>
+          </div>
+          <div className="energy-item">
+            <span className="item-name">Zones with Lights ON:</span>
+            <span className="item-value">
+              {lightingData.filter(d => d.status === 'ON').length}
+            </span>
+          </div>
+          {lightingData.length > 0 && (
+            <div className="graph-container">
+              <GraphComponent type="doughnut" data={lightingStatusData} title="Lighting Zone Status" />
+            </div>
+          )}
         </EnergyConsumptionCard>
 
         {/* HVAC Section */}
-        <EnergyConsumptionCard title="❄️🔥 HVAC Status">
-          <p>Total HVAC Zones Tracked: {hvacData.length}</p>
-          <p>Zones with HVAC Active (ON/ECO): {hvacData.filter(d => d.status === 'ON' || d.status === 'ECO').length}</p>
-          {hvacData.length > 0 &&
-            <GraphComponent
-              type="bar" // Still 'bar', but options will make it horizontal
-              data={hvacStatusOverviewData}
-              title="HVAC System Status Overview"
-              options={{
-                indexAxis: 'y', // This makes the bar chart horizontal
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                  x: {
-                    beginAtZero: true,
-                    title: {
-                      display: true,
-                      text: 'Number of Zones'
-                    }
-                  },
-                  y: {
-                    title: {
-                      display: true,
-                      text: 'Status'
-                    }
-                  }
-                },
-                plugins: {
-                  legend: {
-                    display: false // Legend is not very useful for this single dataset bar chart
-                  },
-                  tooltip: {
-                    enabled: true,
-                    mode: 'index',
-                    intersect: false,
-                    callbacks: {
-                      label: function(context) {
-                        let label = context.dataset.label || '';
-                        if (label) {
-                          label += ': ';
-                        }
-                        if (context.parsed.x !== null) {
-                          label += context.parsed.x + (context.parsed.x === 1 ? ' zone' : ' zones');
-                        }
-                        return label;
+        <EnergyConsumptionCard title="❄️🔥 HVAC Status" className="dashboard-section">
+          <div className="energy-item">
+            <span className="item-name">Total HVAC Zones Tracked:</span>
+            <span className="item-value">{hvacData.length}</span>
+          </div>
+          <div className="energy-item">
+            <span className="item-name">Zones with HVAC Active (ON/ECO):</span>
+            <span className="item-value">
+              {hvacData.filter(d => d.status === 'ON' || d.status === 'ECO').length}
+            </span>
+          </div>
+          {hvacData.length > 0 && (
+            <div className="graph-container">
+              <GraphComponent
+                type="bar"
+                data={hvacStatusOverviewData}
+                title="HVAC System Status Overview"
+                options={{
+                  indexAxis: 'y',
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    x: {
+                      beginAtZero: true,
+                      title: {
+                        display: true,
+                        text: 'Number of Zones'
+                      }
+                    },
+                    y: {
+                      title: {
+                        display: true,
+                        text: 'Status'
                       }
                     }
                   },
-                },
-                hover: {
-                  mode: 'nearest',
-                  intersect: true,
-                  animationDuration: 400 // Duration of hover animation
-                },
-                animation: {
-                  duration: 1000, // General animation duration
-                  easing: 'easeInOutQuart'
-                }
-              }}
-            />
-          }
+                  plugins: {
+                    legend: {
+                      display: false
+                    },
+                    tooltip: {
+                      enabled: true,
+                      mode: 'index',
+                      intersect: false,
+                      callbacks: {
+                        label: function(context) {
+                          let label = context.dataset.label || '';
+                          if (label) {
+                            label += ': ';
+                          }
+                          if (context.parsed.x !== null) {
+                            label += context.parsed.x + (context.parsed.x === 1 ? ' zone' : ' zones');
+                          }
+                          return label;
+                        }
+                      }
+                    },
+                  },
+                  hover: {
+                    mode: 'nearest',
+                    intersect: true,
+                    animationDuration: 400
+                  },
+                  animation: {
+                    duration: 1000,
+                    easing: 'easeInOutQuart'
+                  }
+                }}
+              />
+            </div>
+          )}
         </EnergyConsumptionCard>
 
         {/* Seating Chart Section */}
-        <SeatingChart />
+        <SeatingChart className="seating-section dashboard-section" />
       </div>
 
       <div className="App-right-column">
-        <Leaderboard />
-        {/* Other components for the right column can be added here */}
-        <EnergyConsumptionCard title="🌟 Awe Points Tips">
-            <ul>
-                <li>Use Dark Mode on your laptop.</li>
-                <li>Participate in seat consolidation.</li>
-                <li>Turn off lights in unused meeting rooms.</li>
-                <li>Report energy wastage.</li>
-            </ul>
+        <Leaderboard className="leaderboard-section dashboard-section" />
+        <EnergyConsumptionCard title="🌟 Awe Points Tips" className="dashboard-section">
+          <ul>
+            <li>Use Dark Mode on your laptop.</li>
+            <li>Participate in seat consolidation.</li>
+            <li>Turn off lights in unused meeting rooms.</li>
+            <li>Report energy wastage.</li>
+          </ul>
         </EnergyConsumptionCard>
       </div>
     </div>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { getSeatingArrangement, getSeatingSuggestions } from '../services/api';
-// import './SeatingChart.css'; // CSS already in App.css, but can be separated
 
 const SeatingChart = () => {
   const [seatingArrangement, setSeatingArrangement] = useState(null);
@@ -44,19 +43,17 @@ const SeatingChart = () => {
 
   // Helper to get suggestion for a seat
   const getSeatSuggestion = (seatId) => {
-    if (!suggestions || !suggestions.suggested_moves) return null;
-    const move = suggestions.suggested_moves.find(m => m[1] === seatId); // Is this seat a new suggested spot?
-    if (move) return 'new-location';
-    const currentMove = suggestions.suggested_moves.find(m => {
-        // Need employee data on seats to link this properly or match by current_seat_id
-        // This part is tricky without employee data directly on the seat object from backend.
-        // For now, we'll assume suggestions are simple and directly point to seat_ids.
-        // A more robust solution would involve having employee_id on the seat or enhancing suggestion model.
-        return false; // Placeholder
-    });
-    // if (currentMove) return 'current-location-to-move'; // Mark the seat to be vacated
-    return null;
-  };
+  if (!suggestions || !suggestions.suggested_moves) return null;
+
+  const isNewLocation = suggestions.suggested_moves.find(([_, toSeatId]) => toSeatId === seatId);
+  if (isNewLocation) return 'new-location';
+
+  const isCurrentSeatToBeVacated = suggestions.suggested_moves.find(([fromSeatId, _]) => fromSeatId === seatId);
+  if (isCurrentSeatToBeVacated) return 'vacate-this-seat';
+
+  return null;
+};
+
 
 
   return (

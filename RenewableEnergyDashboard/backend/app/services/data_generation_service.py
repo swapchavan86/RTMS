@@ -350,5 +350,3 @@ else:
     print("DEBUG: data_generation_service: USE_DATABASE_SWITCH is True, skipping module level population.")
 
 print("DEBUG: data_generation_service.py (enhanced version) loaded.")
-
-```

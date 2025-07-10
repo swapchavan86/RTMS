@@ -130,10 +130,8 @@ h1, h2, h3, h4, h5, h6 {
 /* USER ACTION: Please add the following line to your `public/index.html` inside the `<head>` tag:
    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 */
-```
 
-**Note to User (will be included in `message_user` after this step):**
+/* **Note to User (will be included in `message_user` after this step):**
 To use the 'Open Sans' and 'Montserrat' fonts as specified, the user will need to add the Google Fonts import link to their `public/index.html` file. I've included a comment in the CSS suggesting this.
 
-Now, I'll overwrite the `index.css` file.
-```
+Now, I'll overwrite the `index.css` file. */

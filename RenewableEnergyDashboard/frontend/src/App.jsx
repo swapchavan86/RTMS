@@ -11,8 +11,8 @@ function App() {
       <main>
         <DashboardPage /> {/* Render the DashboardPage */}
       </main>
-      <footer style={{textAlign: 'center', padding: '20px', marginTop: '30px', borderTop: '1px solid #eee'}}>
-        <p>© 2023 Office Green Initiative</p>
+      <footer className="App-footer">
+        <p>© 2025 Office Green Initiative</p>
       </footer>
     </div>
   );
