@@ -62,4 +62,4 @@ async def get_leaderboard(limit: int = 10, service = Depends(get_data_service)):
 #         new_employee = Employee(**employee_data.model_dump(), id=new_id, awe_points=0)
 #         service._generated_employees.append(new_employee) # Accessing "private" for mock simplicity
 #         return new_employee
-
+```
