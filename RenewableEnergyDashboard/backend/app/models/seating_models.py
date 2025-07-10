@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import List, Optional, Tuple
-from enum import Enum # Added import
+from enum import Enum # Ensure this line is definitely here
 
 class SeatStatus(str, Enum):
     OCCUPIED = "occupied"
