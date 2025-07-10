@@ -1,127 +1,318 @@
+/* App.css - Main Application Styles */
+
+/* Ensure CSS variables from index.css are available or re-declare if scoped */
+
 .App {
-  text-align: center;
-  font-family: Arial, sans-serif;
+  text-align: left; /* Changed from center for a more standard app layout */
+  background-color: var(--background-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .App-header {
-  background-color: #282c34;
-  padding: 20px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  padding: var(--spacing-lg) var(--spacing-xl);
   color: white;
-  margin-bottom: 20px;
+  text-align: center; /* Header text can be centered */
+  box-shadow: 0 4px 12px var(--shadow-color);
+  border-bottom: 4px solid var(--accent-color); /* Accent border */
+}
+
+.App-header h1 {
+  margin: 0;
+  font-size: 2.2em; /* Larger header font */
+  font-weight: 700; /* Bolder */
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
 
 .App-main-container {
   display: flex;
   flex-direction: row;
-  padding: 10px;
+  flex-wrap: wrap; /* Allow wrapping for responsiveness if needed */
+  padding: var(--spacing-lg);
+  gap: var(--spacing-lg); /* Gap between columns */
+  flex-grow: 1; /* Allow main container to grow and fill space */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .App-left-column {
-  flex: 3; /* Takes 3/4 of the space */
+  flex: 3; /* Takes more space */
+  min-width: 300px; /* Minimum width before wrapping or shrinking too much */
+  animation: fadeIn 0.5s ease-in-out forwards;
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Space between items in this column */
-  padding-right: 10px; /* Space between left and right columns */
+  gap: var(--spacing-lg); /* Space between items in this column */
+  animation: fadeIn 0.5s ease-in-out 0.2s forwards; /* Slight delay for the right column */
 }
 
 .App-right-column {
-  flex: 1; /* Takes 1/4 of the space */
-  padding-left: 10px; /* Space between left and right columns */
+  flex: 1; /* Takes less space */
+  min-width: 280px; /* Minimum width */
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg); /* Space between items in this column */
 }
 
+/* General Dashboard Section / Card Styling */
 .dashboard-section {
-  border: 1px solid #ddd;
-  padding: 15px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: var(--card-background-color);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-lg); /* Softer, larger radius */
+  box-shadow: 0 5px 15px var(--shadow-color);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  border: 1px solid var(--border-color);
 }
 
-.dashboard-section h2 {
+.dashboard-section:hover {
+  transform: translateY(-5px); /* Subtle lift on hover */
+  box-shadow: 0 8px 25px rgba(44, 62, 80, 0.2); /* Stronger shadow on hover */
+}
+
+.dashboard-section h2,
+.dashboard-section h3 { /* Targeting h3 as well, as EnergyCard uses h3 */
+  font-family: var(--font-family-headings);
+  color: var(--primary-color);
   margin-top: 0;
-  color: #333;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--accent-color); /* Accent color for heading underline */
+  font-size: 1.5em; /* For section titles like Leaderboard */
+  font-weight: 600;
+}
+.dashboard-section h3 { /* Specific for EnergyCard or sub-sections */
+    font-size: 1.3em;
+    color: var(--text-color); /* Slightly less prominent than h2 */
+    border-bottom: 1px solid var(--border-color);
 }
 
-/* Placeholder for graph containers if needed */
+
+/* Graph Container Styling */
 .graph-container {
   width: 100%;
-  max-width: 600px; /* Adjust as needed */
-  margin: 20px auto; /* Center graph if it's in its own section */
+  /* height is set inline in GraphComponent.jsx, can be adjusted if needed */
+  padding: var(--spacing-sm) 0; /* Add some padding around graphs */
+  margin-top: var(--spacing-md);
 }
 
+
 /* Leaderboard specific styling */
+.leaderboard-section h2 { /* Ensure Leaderboard h2 gets the primary color and accent border */
+  color: var(--primary-color);
+  border-bottom-color: var(--accent-color);
+}
 .leaderboard-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .leaderboard-list li {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-xs);
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.2s ease;
 }
 
 .leaderboard-list li:last-child {
   border-bottom: none;
 }
 
+.leaderboard-list li:hover {
+  background-color: #f9f9f9; /* Subtle hover for list items */
+}
+
+.leaderboard-list .rank {
+  font-weight: 700;
+  color: var(--primary-color);
+  font-size: 1.1em;
+  margin-right: var(--spacing-md);
+  min-width: 30px; /* Ensure rank numbers align nicely */
+  text-align: right;
+}
+
 .leaderboard-list .employee-name {
-  font-weight: bold;
+  font-weight: 600;
+  color: var(--text-color);
+  flex-grow: 1; /* Allow name to take available space */
 }
 
 .leaderboard-list .awe-points {
-  color: #007bff; /* A nice blue for points */
+  font-weight: 700;
+  color: var(--secondary-color); /* Green for points */
+  font-size: 1.1em;
+  background-color: var(--background-color);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-md);
 }
 
-/* Seating chart placeholder styling */
+
+/* Seating Chart specific styling */
+.seating-section h2 { /* Ensure Seating Chart h2 gets the primary color and accent border */
+  color: var(--primary-color);
+  border-bottom-color: var(--accent-color);
+}
 .seating-chart {
   display: grid;
-  /* Example: grid-template-columns: repeat(10, 1fr); for a 10-column grid */
-  gap: 5px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  max-width: fit-content; /* Adjust to content size */
-  margin: auto; /* Center the chart */
+  gap: 6px; /* Slightly increased gap */
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  background-color: #fdfdfd; /* Slightly off-white for chart background */
+  border-radius: var(--border-radius-sm);
+  margin: var(--spacing-md) auto; /* Center the chart */
+  max-width: 100%; /* Ensure it's responsive */
+  overflow-x: auto; /* Allow horizontal scroll if too many columns */
 }
 
 .seat {
-  width: 30px;
-  height: 30px;
-  border: 1px solid #aaa;
+  min-width: 35px; /* Ensure seats are not too small */
+  height: 35px;
+  border: 1px solid #ccc; /* Darker border for seats */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8em;
-  background-color: #e0e0e0; /* Default for empty */
+  font-size: 1em; /* Larger icon/text in seat */
+  border-radius: var(--border-radius-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-weight: bold;
+}
+.seat:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px var(--shadow-color);
 }
 
 .seat.occupied {
-  background-color: #4CAF50; /* Green for occupied */
+  background-color: var(--secondary-color); /* Green for occupied */
   color: white;
+  border-color: #27AE60; /* Darker green border */
 }
 
 .seat.unoccupied {
-  background-color: #f0f0f0; /* Lighter grey for unoccupied */
+  background-color: #e9ecef; /* Lighter grey for unoccupied */
+  color: #6c757d; /* Muted text color */
+  border-color: #ced4da;
 }
 
-.seat.suggested {
-  background-color: #ffeb3b; /* Yellow for suggested */
-  animation: pulse 1.5s infinite;
+.seat.reserved {
+  background-color: var(--accent-color); /* Yellow for reserved */
+  color: var(--text-color);
+  border-color: #DAA520; /* Darker yellow */
+}
+.seat.disabled {
+  background-color: #adb5bd; /* Grey for disabled */
+  color: #f8f9fa;
+  border-color: #6c757d;
+  cursor: not-allowed;
 }
 
-@keyframes pulse {
+.seat.suggested { /* This class might be added dynamically by SeatingChart.jsx */
+  background-color: var(--primary-color) !important; /* Blue for suggested, important to override if needed */
+  color: white !important;
+  border: 2px dashed var(--accent-color) !important;
+  animation: pulse-suggested 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse-suggested {
   0% {
-    box-shadow: 0 0 0 0 rgba(255, 235, 59, 0.7);
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(41, 128, 185, 0.7);
   }
-  70% {
-    box-shadow: 0 0 0 10px rgba(255, 235, 59, 0);
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 5px 5px rgba(41, 128, 185, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(255, 235, 59, 0);
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(41, 128, 185, 0);
   }
 }
+
+.seating-suggestion-message {
+  background-color: #e8f6f3; /* Light green/blue background for suggestions */
+  border: 1px solid var(--secondary-color);
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  color: var(--text-color);
+}
+.seating-suggestion-message strong {
+  color: var(--secondary-color);
+}
+
+
+/* Energy Card specific item styling */
+.energy-item {
+  padding: var(--spacing-xs) 0;
+  font-size: 0.95em;
+  color: var(--text-color-light);
+}
+.energy-item .item-name {
+  font-weight: 600;
+  color: var(--text-color);
+}
+.energy-item .item-value {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+.energy-item .item-details {
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+/* Awe Points Tips card specific styling */
+.dashboard-section ul { /* Targeting lists within dashboard sections, like in Awe Points Tips */
+  list-style: '🌟'; /* Using an emoji as a list bullet */
+  padding-left: var(--spacing-lg);
+}
+.dashboard-section ul li {
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-color-light);
+  line-height: 1.5;
+}
+
+/* Footer styling (if it's part of App.jsx) */
+.App footer { /* Assuming footer is a direct child of .App or styled elsewhere */
+  text-align: center;
+  padding: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  border-top: 1px solid var(--border-color);
+  color: var(--text-color-light);
+  font-size: 0.9em;
+  background-color: var(--card-background-color); /* Consistent with card backgrounds */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .App-main-container {
+    flex-direction: column; /* Stack columns on smaller screens */
+  }
+  .App-header h1 {
+    font-size: 1.8em;
+  }
+  .dashboard-section h2 {
+    font-size: 1.3em;
+  }
+   .dashboard-section h3 {
+    font-size: 1.1em;
+  }
+}
+```
+
+This `App.css` introduces:
+*   A new header style with a gradient and accent border.
+*   Updated layout for columns with more defined spacing.
+*   Redesigned `.dashboard-section` cards with shadows, hover effects, and new heading styles.
+*   Specific styling enhancements for Leaderboard list items and Seating Chart seats (including colors for new statuses like 'reserved' and 'disabled' if they are used in data).
+*   A pulsing animation for 'suggested' seats.
+*   Improved styling for energy item details and Awe Points tips list.
+*   Basic responsive adjustments for smaller screens.
+
+I've also added a comment in `index.css` about importing Google Fonts.
+```
