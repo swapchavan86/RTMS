@@ -68,4 +68,3 @@ async def get_hvac_status_data(service = Depends(get_data_service)):
         #     main_contributors=main_contributors
         # )
 #     pass
-```
