@@ -1,0 +1,60 @@
+graph TD
+    A[Users] -- Interacts with --> B(Frontend - React App);
+
+    subgraph "User Interface (Browser)"
+        B
+    end
+
+    B -- HTTP API Calls --> C(Backend - FastAPI);
+
+    subgraph "Application Server"
+        C
+    end
+
+    C -- Uses --> D[Data Generation Service];
+    D -- Generates --> E{Mock Data};
+    C -- Stores/Retrieves (Future) --> F[Database];
+
+    subgraph "Data Layer"
+        D
+        E
+        F
+    end
+
+    B -- Renders --> G[Dashboard View];
+
+    subgraph "Dashboard Components (Frontend)"
+        direction LR
+        G1[Leaderboard]
+        G2[Energy Consumption Panels]
+        G3[Seating Chart]
+        G4[Data Graphs]
+    end
+
+    G --- G1;
+    G --- G2;
+    G --- G3;
+    G --- G4;
+
+    C -- Serves Data To --> G1;
+    C -- Serves Data To --> G2;
+    C -- Serves Data To --> G3;
+    C -- Serves Data To --> G4;
+
+
+    classDef frontend fill:#D6EAF8,stroke:#3498DB,stroke-width:2px;
+    classDef backend fill:#D5F5E3,stroke:#2ECC71,stroke-width:2px;
+    classDef data fill:#FCF3CF,stroke:#F1C40F,stroke-width:2px;
+
+    class A,B,G,G1,G2,G3,G4 frontend;
+    class C backend;
+    class D,E,F data;
+
+    note for D "Generates random but realistic data for employees, energy usage, seating, etc. Includes a switch for DB."
+    note for F "Future state: Replace mock data generation with actual database persistence."
+    note for C "Exposes RESTful APIs for frontend consumption. Handles business logic."
+    note for B "Fetches data from backend and displays it. Manages UI state and interactions."
+    note for G1 "Top-right of the dashboard."
+    note for G2 "Left column, below header."
+    note for G3 "Left column, below Energy Consumption."
+    note for G4 "Integrated within relevant Energy Consumption Panels."

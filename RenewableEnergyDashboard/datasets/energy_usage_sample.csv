@@ -1,0 +1,6 @@
+employee_id,timestamp,laptop_hours,laptop_mode,light_zone_used,light_hours_on,ac_zone_used,ac_hours_on,projector_usage_hours,awe_points_earned
+emp001,2023-10-27T09:00:00Z,8,Dark Mode,A1,8,A1,6,0,50
+emp002,2023-10-27T09:00:00Z,7.5,Light Mode,A2,7,A2,7,1,30
+emp003,2023-10-27T09:00:00Z,8.2,Dark Mode,B1,8,B1,5,0.5,65
+emp004,2023-10-27T09:00:00Z,6,Light Mode,C1,6,C1,6,0,20
+emp005,2023-10-27T09:00:00Z,9,Dark Mode,B2,9,B2,8,2,80
