@@ -135,7 +135,64 @@ const DashboardPage = () => {
         <EnergyConsumptionCard title="❄️🔥 HVAC Status">
           <p>Total HVAC Zones Tracked: {hvacData.length}</p>
           <p>Zones with HVAC Active (ON/ECO): {hvacData.filter(d => d.status === 'ON' || d.status === 'ECO').length}</p>
-          {hvacData.length > 0 && <GraphComponent type="bar" data={hvacStatusOverviewData} title="HVAC System Status Overview"/>}
+          {hvacData.length > 0 &&
+            <GraphComponent
+              type="bar" // Still 'bar', but options will make it horizontal
+              data={hvacStatusOverviewData}
+              title="HVAC System Status Overview"
+              options={{
+                indexAxis: 'y', // This makes the bar chart horizontal
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  x: {
+                    beginAtZero: true,
+                    title: {
+                      display: true,
+                      text: 'Number of Zones'
+                    }
+                  },
+                  y: {
+                    title: {
+                      display: true,
+                      text: 'Status'
+                    }
+                  }
+                },
+                plugins: {
+                  legend: {
+                    display: false // Legend is not very useful for this single dataset bar chart
+                  },
+                  tooltip: {
+                    enabled: true,
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                      label: function(context) {
+                        let label = context.dataset.label || '';
+                        if (label) {
+                          label += ': ';
+                        }
+                        if (context.parsed.x !== null) {
+                          label += context.parsed.x + (context.parsed.x === 1 ? ' zone' : ' zones');
+                        }
+                        return label;
+                      }
+                    }
+                  },
+                },
+                hover: {
+                  mode: 'nearest',
+                  intersect: true,
+                  animationDuration: 400 // Duration of hover animation
+                },
+                animation: {
+                  duration: 1000, // General animation duration
+                  easing: 'easeInOutQuart'
+                }
+              }}
+            />
+          }
         </EnergyConsumptionCard>
 
         {/* Seating Chart Section */}
