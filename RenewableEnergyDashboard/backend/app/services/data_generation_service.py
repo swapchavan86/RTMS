@@ -93,7 +93,7 @@ def get_mock_hvac_status() -> List[Dict[str, Any]]:
 def get_mock_projector_usage() -> List[ProjectorUsage]:
     if USE_DATABASE_SWITCH: return []
     return [
-        ProjectorUsage(room_id="MR1", hours_on":0.5, status=LightState.ON)
+        ProjectorUsage(room_id="MR1", hours_on=0.5, status=LightState.ON)
     ]
 
 def get_mock_leaderboard() -> List[Dict[str, Any]]:
