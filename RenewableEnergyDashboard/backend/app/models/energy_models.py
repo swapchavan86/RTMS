@@ -55,4 +55,4 @@ class OverallEnergySummary(BaseModel):
     total_consumption_kwh_today: float
     comparison_yesterday_percentage: float # e.g., -5.2 means 5.2% less than yesterday
     main_contributors: List[EnergyComponentData]
-```
+
