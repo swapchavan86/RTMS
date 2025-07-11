@@ -12,9 +12,7 @@ const Leaderboard = () => {
     const fetchLeaderboard = async () => {
       try {
         setLoading(true);
-        // Fetch more than TOP_N_DISPLAY if we plan to show more with "View All"
-        // For now, let's assume it still fetches top 10, or adjust if backend supports more
-        const response = await getLeaderboard(10);
+        const response = await getLeaderboard(10); // Fetch top 10
         setLeaderboardData(response.data || []);
         setError(null);
       } catch (err) {
@@ -29,11 +27,11 @@ const Leaderboard = () => {
     fetchLeaderboard();
   }, []);
 
-  // Loading state with shimmer effect
+  // Loading state
   if (loading) {
     return (
       <div className="dashboard-section leaderboard-section">
-        <h2>🏆 Employee Leaderboard</h2>
+        <h2>Employee Leaderboard</h2>
         <div className="loading-shimmer" style={{
           height: '200px',
           borderRadius: 'var(--border-radius-lg)',
@@ -50,55 +48,23 @@ const Leaderboard = () => {
     );
   }
 
-  // Error state with enhanced styling
+  // Error state
   if (error) {
     return (
       <div className="dashboard-section leaderboard-section">
-        <h2>🏆 Employee Leaderboard</h2>
-        <div style={{
-          background: 'linear-gradient(135deg, #fef2f2, #fee2e2)',
-          border: '1px solid var(--error-color)',
-          padding: 'var(--spacing-lg)',
-          borderRadius: 'var(--border-radius-lg)',
-          color: 'var(--text-color)',
-          borderLeft: '4px solid var(--error-color)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 'var(--spacing-md)'
-        }}>
-          <span style={{ fontSize: '1.2em' }}>⚠️</span>
-          <div>
-            <strong style={{ color: 'var(--error-color)', fontWeight: '600' }}>Error:</strong>
-            <div style={{ marginTop: 'var(--spacing-xs)', color: 'var(--text-color-light)' }}>
-              {error}
-            </div>
-          </div>
-        </div>
+        <h2>Employee Leaderboard</h2>
+        <div className="error-message-box">{error}</div>
       </div>
     );
   }
 
-  // Empty state with enhanced styling
+  // Empty state
   if (leaderboardData.length === 0) {
     return (
       <div className="dashboard-section leaderboard-section">
-        <h2>🏆 Employee Leaderboard</h2>
-        <div style={{
-          background: 'linear-gradient(135deg, #f8fafc, #ffffff)',
-          border: '1px solid var(--border-color-light)',
-          padding: 'var(--spacing-xl)',
-          borderRadius: 'var(--border-radius-lg)',
-          textAlign: 'center',
-          color: 'var(--text-color-light)',
-          borderLeft: '4px solid var(--info-color)'
-        }}>
-          <div style={{ fontSize: '2rem', marginBottom: 'var(--spacing-md)' }}>📊</div>
-          <div style={{ fontSize: '1.1rem', fontWeight: '500' }}>
-            No leaderboard data available
-          </div>
-          <div style={{ fontSize: '0.9rem', marginTop: 'var(--spacing-sm)' }}>
-            Check back later for updated rankings
-          </div>
+        <h2>Employee Leaderboard</h2>
+        <div className="loading-message-box" style={{ background: 'var(--border-color-light)'}}>
+          No leaderboard data available right now.
         </div>
       </div>
     );
@@ -108,66 +74,7 @@ const Leaderboard = () => {
     <div className="dashboard-section leaderboard-section">
       <h2>Employee Leaderboard</h2>
       
-      {/* Stats summary */}
-      <div style={{
-        display: 'flex',
-        gap: 'var(--spacing-md)',
-        marginBottom: 'var(--spacing-lg)',
-        flexWrap: 'wrap'
-      }}>
-        <div style={{
-          background: 'linear-gradient(135deg, #ecfdf5, #d1fae5)',
-          padding: 'var(--spacing-md)',
-          borderRadius: 'var(--border-radius-lg)',
-          border: '1px solid #a7f3d0',
-          flex: '1',
-          minWidth: '120px',
-          textAlign: 'center'
-        }}>
-          <div style={{ 
-            fontSize: '1.5rem', 
-            fontWeight: '700', 
-            color: 'var(--secondary-color)' 
-          }}>
-            {leaderboardData.length}
-          </div>
-          <div style={{ 
-            fontSize: '0.9rem', 
-            color: 'var(--text-color-light)',
-            fontWeight: '500'
-          }}>
-            Total Employees
-          </div>
-        </div>
-        
-        <div style={{
-          background: 'linear-gradient(135deg, #eff6ff, #dbeafe)',
-          padding: 'var(--spacing-md)',
-          borderRadius: 'var(--border-radius-lg)',
-          border: '1px solid #93c5fd',
-          flex: '1',
-          minWidth: '120px',
-          textAlign: 'center'
-        }}>
-          <div style={{ 
-            fontSize: '1.5rem', 
-            fontWeight: '700', 
-            color: 'var(--primary-color)' 
-          }}>
-            {leaderboardData.length > 0 ? leaderboardData[0].awe_points : 0}
-          </div>
-          <div style={{ 
-            fontSize: '0.9rem', 
-            color: 'var(--text-color-light)',
-            fontWeight: '500'
-          }}>
-            Top Score
-          </div>
-        </div>
-      </div>
-
-      {/* Leaderboard list */}
-      {/* Always render top N */}
+      {/* Leaderboard list - Top Entries */}
       <ul className="leaderboard-list top-entries">
         {leaderboardData.slice(0, TOP_N_DISPLAY).map((entry, index) => (
           <li key={entry.employee_id || index} className={`rank-${index + 1}`} style={{
@@ -188,13 +95,13 @@ const Leaderboard = () => {
         ))}
       </ul>
 
-      {/* Conditionally render the rest of the list if showAll is true and there are more entries */}
+      {/* Conditionally render the rest of the list if showAll is true */}
       {showAll && leaderboardData.length > TOP_N_DISPLAY && (
         <div className="leaderboard-list-more-wrapper">
           <ul className="leaderboard-list additional-entries">
             {leaderboardData.slice(TOP_N_DISPLAY).map((entry, index) => (
               <li key={entry.employee_id || index} style={{
-                animation: `fadeInUp var(--transition-normal) ease-out ${ (index + TOP_N_DISPLAY) * 0.05}s both` // Slower animation for these
+                animation: `fadeInUp var(--transition-fast) ease-out ${index * 0.05}s both`
               }}>
                 <span className="rank">#{entry.rank}</span>
                 <div style={{ display: 'flex', flexDirection: 'column', flex: '1', marginLeft: 'var(--spacing-md)' }}>
@@ -214,23 +121,6 @@ const Leaderboard = () => {
           {showAll ? 'Show Less' : `View All (${leaderboardData.length - TOP_N_DISPLAY} more)`}
         </button>
       )}
-
-      {/* Additional info */}
-      <div style={{
-        marginTop: 'var(--spacing-md)', // Reduced margin a bit
-        padding: 'var(--spacing-sm)', // Reduced padding
-        background: 'linear-gradient(135deg, #f8fafc, #ffffff)',
-        borderRadius: 'var(--border-radius-lg)',
-        border: '1px solid var(--border-color-light)',
-        fontSize: '0.9rem',
-        color: 'var(--text-color-light)',
-        textAlign: 'center'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--spacing-sm)' }}>
-          <span>🔄</span>
-          <span>Rankings updated in real-time</span>
-        </div>
-      </div>
     </div>
   );
 };

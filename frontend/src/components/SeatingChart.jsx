@@ -36,7 +36,7 @@ const SeatingChart = () => {
   }, []);
 
   if (loading) {
-    return <div className="dashboard-section seating-section">Loading Seating Chart...</div>;
+    return <div className="dashboard-section seating-section loading-message-box">Loading Seating Chart...</div>;
   }
 
   if (error) {
@@ -60,7 +60,7 @@ const SeatingChart = () => {
 
   return (
     <div className="dashboard-section seating-section">
-      <h2>🪑 Office Seating Arrangement</h2>
+      <h2>Office Seating Arrangement</h2>
       <p>
         Total Seats: {seatingArrangement.total_seats} | Occupied: {seatingArrangement.occupied_seats} | Unoccupied: {seatingArrangement.unoccupied_seats}
       </p>
@@ -112,14 +112,12 @@ const SeatingChart = () => {
               if (isTargetForMove) {
                 seatClass += ' suggested'; // Use existing .suggested for new locations
                 titleText += `\n✨ Suggested new seat for an employee.`;
-                // For arrow direction, consider specific icons or ::before/::after content based on class
               }
 
-              if (employeeIsMoving && suggestedMovesMap[seat.employee_id].toSeatId !== seat.seat_id) {
+              if (employeeIsMoving) {
                 // This employee is moving FROM this seat
-                seatClass += ' suggested-vacate'; // New class for vacating seats
+                seatClass += ' suggested-vacate';
                 titleText += `\n➡️ Suggested to move ${seat.employee_id} from this seat to ${suggestedMovesMap[seat.employee_id].toSeatId}.`;
-                // suggestionIcon logic can be more complex if different icons per state are needed
               }
 
               // Determine icon based on final classes

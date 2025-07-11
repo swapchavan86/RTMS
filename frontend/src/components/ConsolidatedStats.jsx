@@ -17,12 +17,18 @@ const AwePointsTips = () => {
 
   useEffect(() => {
     setCurrentTip(tips[Math.floor(Math.random() * tips.length)]);
+    
+    const tipInterval = setInterval(() => {
+        setCurrentTip(tips[Math.floor(Math.random() * tips.length)]);
+    }, 15000); // Change tip every 15 seconds
+
+    return () => clearInterval(tipInterval); // Cleanup on unmount
   }, []);
 
   return (
     // Apply .dashboard-section for consistent card styling, or use custom .awe-tips-section
     <div className="dashboard-section awe-tips-container">
-      <h4>🌟 Tip of the Day</h4>
+      <h4>Tip of the Day</h4>
       {currentTip ? <p>{currentTip}</p> : <p>Loading tip...</p>}
     </div>
   );
@@ -67,9 +73,6 @@ const ConsolidatedStats = () => {
           laptopData.filter(d => d.mode === 'Light Mode').length,
           laptopData.filter(d => d.mode === 'Dark Mode').length,
         ],
-        backgroundColor: ['rgba(255, 206, 86, 0.8)', 'rgba(54, 162, 235, 0.8)'],
-        borderColor: ['rgba(255, 206, 86, 1)', 'rgba(54, 162, 235, 1)'],
-        borderWidth: 1,
       },
     ],
   };
@@ -83,9 +86,6 @@ const ConsolidatedStats = () => {
           lightingData.filter(d => d.status === 'ON').length,
           lightingData.filter(d => d.status === 'OFF').length,
         ],
-        backgroundColor: ['rgba(75, 192, 192, 0.8)', 'rgba(201, 203, 207, 0.8)'],
-        borderColor: ['rgba(75, 192, 192, 1)', 'rgba(201, 203, 207, 1)'],
-        borderWidth: 1,
       },
     ],
   };
@@ -100,17 +100,6 @@ const ConsolidatedStats = () => {
           hvacData.filter(d => d.status === 'ECO').length,
           hvacData.filter(d => d.status === 'OFF').length,
         ],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.8)',
-          'rgba(75, 192, 192, 0.8)',
-          'rgba(201, 203, 207, 0.8)'
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(201, 203, 207, 1)'
-        ],
-        borderWidth: 1,
       },
     ],
   };
@@ -144,7 +133,7 @@ const ConsolidatedStats = () => {
 
   if (loading) {
     return (
-      <div className="dashboard-section loading-shimmer" style={{ minHeight: '300px' }}>
+      <div className="dashboard-section loading-shimmer" style={{ minHeight: '300px', borderRadius: 'var(--border-radius-xl)' }}>
         Loading Energy Statistics...
       </div>
     );
@@ -186,7 +175,7 @@ const ConsolidatedStats = () => {
           </div>
 
           <div className="stat-item hvac-stat-item"> {/* Special class for HVAC if it needs different layout */}
-            <h4>❄️ HVAC</h4>
+            <h4>💨 HVAC</h4>
              <div className="stat-item-content">
                 <p>Zones: {hvacData.length}</p>
                 <p>Active: {hvacData.filter(d => d.status === 'ON' || d.status === 'ECO').length}</p>
@@ -205,87 +194,3 @@ const ConsolidatedStats = () => {
 };
 
 export default ConsolidatedStats;
-
-/*
-  CSS to be added to App.css:
-
-.consolidated-stats-container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xl); // Gap between stats block and tips block
-}
-
-.energy-stats-overview {
-  // This is a .dashboard-section already, so it gets that styling.
-  // Add specific styles if needed.
-}
-
-.energy-stats-overview h3 {
-  margin-bottom: var(--spacing-md);
-  font-size: 1.3rem;
-  text-align: center;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); // Adjust minmax for compactness
-  gap: var(--spacing-md); // Smaller gap for internal items
-}
-
-.stat-item {
-  background-color: var(--card-background-color); // Or slightly different like #f9fafb
-  padding: var(--spacing-sm); // Smaller padding
-  border-radius: var(--border-radius-lg);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  border: 1px solid var(--border-color-light);
-  display: flex;
-  flex-direction: column;
-  align-items: center; // Center content
-  text-align: center;
-}
-
-.stat-item h4 {
-  margin-top: 0;
-  margin-bottom: var(--spacing-xs);
-  font-size: 0.95rem; // Smaller font for item titles
-  color: var(--text-color);
-  font-weight: 500;
-}
-
-.stat-item-content p {
-  margin: 2px 0;
-  font-size: 0.85rem; // Smaller font for stat values
-  color: var(--text-color-light);
-}
-
-.mini-graph-container {
-  width: 100%;
-  height: 100px; // Fixed height for small graphs
-  margin-top: var(--spacing-sm);
-}
-
-.hvac-stat-item .mini-graph-container { // HVAC bar chart might need more width to be clear
-  height: 100px; // Can be adjusted if bar chart needs more space
-}
-
-.awe-tips-container {
-  // This is a .dashboard-section already
-  padding: var(--spacing-md); // Adjust padding if needed
-}
-
-.awe-tips-container h4 {
-  margin-top: 0;
-  margin-bottom: var(--spacing-sm);
-  font-size: 1rem;
-  color: var(--accent-color); // Or primary color
-  text-align: center;
-}
-
-.awe-tips-container p {
-  font-size: 0.9rem;
-  color: var(--text-color);
-  line-height: 1.4;
-  text-align: center;
-}
-
-*/

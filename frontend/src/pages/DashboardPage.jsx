@@ -1,59 +1,139 @@
-import React, { useState, useEffect } from 'react'; // Removed useState, useEffect if all data fetching moves
+import React, { useState, useEffect } from 'react';
 import Leaderboard from '../components/Leaderboard';
-// EnergyConsumptionCard and GraphComponent are now primarily used within ConsolidatedStats for these sections
 import SeatingChart from '../components/SeatingChart';
-import ConsolidatedStats from '../components/ConsolidatedStats'; // Import the new component
-
-// APIs for laptop, lighting, hvac are now called within ConsolidatedStats
-// import {
-//     getLaptopUsage,
-//     getLightingStatus,
-//     getHvacStatus
-// } from '../services/api';
+import EnergyConsumptionCard from '../components/EnergyConsumptionCard'; // Re-using this for stats
+import GraphComponent from '../components/GraphComponent'; // To be passed as children
+import { getLaptopUsage, getLightingStatus, getHvacStatus } from '../services/api';
 
 const DashboardPage = () => {
-  // Laptop, Lighting, HVAC data states and fetching logic are moved to ConsolidatedStats.jsx
-  // const [laptopData, setLaptopData] = useState([]);
-  // const [lightingData, setLightingData] = useState([]);
-  // const [hvacData, setHvacData] = useState([]);
+  const [laptopData, setLaptopData] = useState([]);
+  const [lightingData, setLightingData] = useState([]);
+  const [hvacData, setHvacData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // The main DashboardPage might still have a loading state for other components if they fetch data,
-  // or a general loading state if ConsolidatedStats indicates loading.
-  // For now, assuming ConsolidatedStats handles its own loading/error states internally.
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchAllStatsData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        // Fetch all data in parallel
+        const [laptopRes, lightingRes, hvacRes] = await Promise.all([
+          getLaptopUsage(),
+          getLightingStatus(),
+          getHvacStatus()
+        ]);
+        setLaptopData(laptopRes.data || []);
+        setLightingData(lightingRes.data || []);
+        setHvacData(hvacRes.data || []);
+      } catch (err) {
+        console.error("Error fetching dashboard data:", err);
+        setError(err.message || "Failed to fetch energy stats.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAllStatsData();
+  }, []);
 
-  // useEffect(() => {
-    // This useEffect was for fetching laptop, lighting, hvac data.
-    // It's removed as ConsolidatedStats now handles this.
-    // If DashboardPage fetched other data, that would remain here.
-  // }, []);
+  // --- Chart Data Preparation ---
 
-  // Graph data preparation for laptop, lighting, hvac is also moved to ConsolidatedStats.jsx
+  const laptopUsageModeData = {
+    labels: ['Light Mode', 'Dark Mode'],
+    datasets: [{
+      label: 'Laptop Usage Mode',
+      data: [
+        laptopData.filter(d => d.mode === 'Light Mode').length,
+        laptopData.filter(d => d.mode === 'Dark Mode').length,
+      ],
+    }],
+  };
+  
+  const lightingStatusData = {
+    labels: ['ON', 'OFF'],
+    datasets: [{
+      label: 'Lighting Status',
+      data: [
+        lightingData.filter(d => d.status === 'ON').length,
+        lightingData.filter(d => d.status === 'OFF').length,
+      ],
+    }],
+  };
 
-  // Simplification: Main page loading/error states could be driven by status from child components
-  // or a simpler check. For now, we let ConsolidatedStats render its own loader/error.
-  // If other components (Leaderboard, SeatingChart) also have heavy loading,
-  // a global skeleton/loader for the page might be better.
+  const hvacStatusOverviewData = {
+    labels: ['ON', 'ECO', 'OFF'],
+    datasets: [{
+      label: 'HVAC Status',
+      data: [
+        hvacData.filter(d => d.status === 'ON').length,
+        hvacData.filter(d => d.status === 'ECO').length,
+        hvacData.filter(d => d.status === 'OFF').length,
+      ],
+    }],
+  };
+  
+  // --- Chart Options ---
+  const commonPieOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom' } },
+  };
 
-  // Example: if (loading) return <PageLoader />;
-  // Example: if (error) return <PageError message={error} />;
+  const commonBarOptions = {
+    ...commonPieOptions,
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: { x: { beginAtZero: true } },
+  };
 
   return (
     <div className="App-main-container">
-      {/* Column 1: Consolidated Energy Stats & Awe Points Tips */}
-      <div className="dashboard-column dashboard-column-1">
-        <ConsolidatedStats />
+      {/* Column 1: Laptop and Lighting Stats */}
+      <div className="dashboard-column">
+        <EnergyConsumptionCard
+          title="Laptop Usage"
+          cardType="laptop"
+          loading={loading}
+          summaryData={{
+            value: (laptopData.reduce((acc, curr) => acc + curr.hours_on, 0) / (laptopData.length || 1)).toFixed(1) + 'h',
+            label: 'Avg Daily Use'
+          }}
+        >
+          <GraphComponent type="doughnut" data={laptopUsageModeData} options={commonPieOptions} />
+        </EnergyConsumptionCard>
+        
+        <EnergyConsumptionCard
+          title="Lighting Status"
+          cardType="lighting"
+          loading={loading}
+          summaryData={{
+            value: lightingData.filter(d => d.status === 'ON').length,
+            label: 'Zones ON'
+          }}
+        >
+          <GraphComponent type="pie" data={lightingStatusData} options={commonPieOptions} />
+        </EnergyConsumptionCard>
       </div>
 
-      {/* Column 2: Employee Engagement */}
-      <div className="dashboard-column dashboard-column-2">
-        <Leaderboard className="leaderboard-section dashboard-section" />
+      {/* Column 2: Leaderboard and HVAC */}
+      <div className="dashboard-column">
+        <Leaderboard />
+        <EnergyConsumptionCard
+          title="HVAC Status"
+          cardType="hvac"
+          loading={loading}
+          summaryData={{
+            value: hvacData.filter(d => d.status !== 'OFF').length,
+            label: 'Active Zones'
+          }}
+        >
+          <GraphComponent type="bar" data={hvacStatusOverviewData} options={commonBarOptions} />
+        </EnergyConsumptionCard>
       </div>
 
-      {/* Column 3: Interactive Office Map */}
-      <div className="dashboard-column dashboard-column-3">
-        <SeatingChart className="seating-section dashboard-section" />
+      {/* Column 3: Seating Chart */}
+      <div className="dashboard-column col-3">
+        <SeatingChart />
       </div>
     </div>
   );
