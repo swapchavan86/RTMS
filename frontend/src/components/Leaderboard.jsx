@@ -5,13 +5,17 @@ const Leaderboard = () => {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showAll, setShowAll] = useState(false);
+  const TOP_N_DISPLAY = 3; // Number of top entries to always display prominently
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
         setLoading(true);
-        const response = await getLeaderboard(10); // Get top 10
-        setLeaderboardData(response.data);
+        // Fetch more than TOP_N_DISPLAY if we plan to show more with "View All"
+        // For now, let's assume it still fetches top 10, or adjust if backend supports more
+        const response = await getLeaderboard(10);
+        setLeaderboardData(response.data || []);
         setError(null);
       } catch (err) {
         console.error("Error fetching leaderboard data:", err);
@@ -163,78 +167,58 @@ const Leaderboard = () => {
       </div>
 
       {/* Leaderboard list */}
-      <ul className="leaderboard-list">
-        {leaderboardData.map((entry, index) => (
-          <li key={entry.employee_id || index} style={{
+      {/* Always render top N */}
+      <ul className="leaderboard-list top-entries">
+        {leaderboardData.slice(0, TOP_N_DISPLAY).map((entry, index) => (
+          <li key={entry.employee_id || index} className={`rank-${index + 1}`} style={{
             animation: `fadeInUp var(--transition-normal) ease-out ${index * 0.1}s both`
           }}>
             <span className="rank">#{entry.rank}</span>
-            <div style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              flex: '1',
-              marginLeft: 'var(--spacing-md)'
-            }}>
+            <div style={{ display: 'flex', flexDirection: 'column', flex: '1', marginLeft: 'var(--spacing-md)' }}>
               <span className="employee-name">{entry.name}</span>
-              {entry.department && (
-                <span style={{
-                  fontSize: '0.85rem',
-                  color: 'var(--text-color-muted)',
-                  fontWeight: '400'
-                }}>
-                  {entry.department}
-                </span>
-              )}
+              {entry.department && <span className="employee-department">{entry.department}</span>}
             </div>
-            <div style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'flex-end',
-              gap: 'var(--spacing-xs)'
-            }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 'var(--spacing-xs)' }}>
               <span className="awe-points">{entry.awe_points} AwePs</span>
-              {index === 0 && (
-                <span style={{
-                  fontSize: '0.75rem',
-                  color: 'var(--accent-color)',
-                  fontWeight: '600',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px'
-                }}>
-                  Champion
-                </span>
-              )}
-              {index === 1 && (
-                <span style={{
-                  fontSize: '0.75rem',
-                  color: '#6b7280',
-                  fontWeight: '600',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px'
-                }}>
-                  Runner-up
-                </span>
-              )}
-              {index === 2 && (
-                <span style={{
-                  fontSize: '0.75rem',
-                  color: '#d97706',
-                  fontWeight: '600',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px'
-                }}>
-                  Third Place
-                </span>
-              )}
+              {index === 0 && <span className="rank-badge champion">Champion 🥇</span>}
+              {index === 1 && <span className="rank-badge runner-up">Runner-Up 🥈</span>}
+              {index === 2 && <span className="rank-badge third-place">Third Place 🥉</span>}
             </div>
           </li>
         ))}
       </ul>
 
+      {/* Conditionally render the rest of the list if showAll is true and there are more entries */}
+      {showAll && leaderboardData.length > TOP_N_DISPLAY && (
+        <div className="leaderboard-list-more-wrapper">
+          <ul className="leaderboard-list additional-entries">
+            {leaderboardData.slice(TOP_N_DISPLAY).map((entry, index) => (
+              <li key={entry.employee_id || index} style={{
+                animation: `fadeInUp var(--transition-normal) ease-out ${ (index + TOP_N_DISPLAY) * 0.05}s both` // Slower animation for these
+              }}>
+                <span className="rank">#{entry.rank}</span>
+                <div style={{ display: 'flex', flexDirection: 'column', flex: '1', marginLeft: 'var(--spacing-md)' }}>
+                  <span className="employee-name">{entry.name}</span>
+                  {entry.department && <span className="employee-department">{entry.department}</span>}
+                </div>
+                <span className="awe-points">{entry.awe_points} AwePs</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* "View All" / "Show Less" Button */}
+      {leaderboardData.length > TOP_N_DISPLAY && (
+        <button onClick={() => setShowAll(!showAll)} className="leaderboard-toggle-button">
+          {showAll ? 'Show Less' : `View All (${leaderboardData.length - TOP_N_DISPLAY} more)`}
+        </button>
+      )}
+
       {/* Additional info */}
       <div style={{
-        marginTop: 'var(--spacing-lg)',
-        padding: 'var(--spacing-md)',
+        marginTop: 'var(--spacing-md)', // Reduced margin a bit
+        padding: 'var(--spacing-sm)', // Reduced padding
         background: 'linear-gradient(135deg, #f8fafc, #ffffff)',
         borderRadius: 'var(--border-radius-lg)',
         border: '1px solid var(--border-color-light)',
