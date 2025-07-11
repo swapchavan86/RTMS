@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api';
+// Changed the environment variable key to REACT_APP_BACKEND_URL for consistency
+// and set the local fallback to your common local API path.
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000/api';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
