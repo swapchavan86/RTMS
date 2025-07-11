@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getLeaderboard } from '../services/api';
+const { getLeaderboard } = require('../services/api');
 
 const Leaderboard = () => {
   const [leaderboardData, setLeaderboardData] = useState([]);

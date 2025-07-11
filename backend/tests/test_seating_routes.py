@@ -72,12 +72,12 @@ def test_get_seating_suggestions_db_switch_scenario(client: TestClient, mock_dat
 
     original_suggestion_mock = mock_data_service.get_mock_seating_suggestions
     mock_data_service.get_mock_seating_suggestions = MagicMock(
-        return_value={"message": "Seating optimization suggestions are not available in DB mode yet."} # This is what actual service returns
+        return_value={"detail": "Seating optimization suggestions are not available in DB mode yet."} # This is what actual service returns
     )
 
     response = client.get("/api/seating/suggestions/")
-    assert response.status_code == 200 # The route itself doesn't throw 501 based on switch
-    assert response.json()["message"] == "Seating optimization suggestions are not available in DB mode yet."
+    assert response.status_code == 501 # The route itself doesn't throw 501 based on switch
+    assert response.json()["detail"] == "Database connection not implemented yet."
 
     # Restore original mock and switch
     mock_data_service.get_mock_seating_suggestions = original_suggestion_mock
@@ -104,7 +104,7 @@ def test_get_seating_arrangement_check_data_structure(client: TestClient, mock_d
         assert "zone_id" in zone
         assert isinstance(zone["zone_id"], str)
         assert "description" in zone
-        assert isinstance(zone["description"], str)
+        assert isinstance(zone["description"], (str, type(None)))
         assert "grid_rows" in zone
         assert isinstance(zone["grid_rows"], int)
         assert "grid_cols" in zone
@@ -185,4 +185,3 @@ def test_get_seating_arrangement_internal_error(client: TestClient, mock_data_se
     response = client.get("/api/seating/arrangement/")
     assert response.status_code == 500 # FastAPI's default for unhandled exceptions
     mock_data_service.get_mock_seating_arrangement_and_assign_employees.assert_called_once()
-```

@@ -64,5 +64,3 @@ def test_get_laptop_usage_db_switch_scenario(client: TestClient, mock_data_servi
 #     assert len(json_response) == 1
 #     assert json_response[0]["room_id"] == "MeetingRoom101"
 #     mock_data_service.get_mock_projector_usage.assert_called_once()
-
-```
