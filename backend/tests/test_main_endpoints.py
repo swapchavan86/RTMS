@@ -18,7 +18,7 @@ def test_openapi_docs_accessible(client: TestClient):
     response = client.get("/docs")
     assert response.status_code == 200
     # Check for a common string in the Swagger UI HTML title
-    assert "<title>FastAPI - Swagger UI</title>" in response.text
+    assert "<title>Renewable Energy Dashboard API - Swagger UI</title>" in response.text
 
 def test_redoc_accessible(client: TestClient):
     """
@@ -27,5 +27,4 @@ def test_redoc_accessible(client: TestClient):
     response = client.get("/redoc")
     assert response.status_code == 200
     # Check for a common string in the ReDoc HTML title
-    assert "<title>ReDoc</title>" in response.text
-```
+    assert "ReDoc" in response.text

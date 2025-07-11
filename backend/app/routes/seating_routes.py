@@ -17,14 +17,20 @@ async def get_seating_arrangement_data(service = Depends(get_data_service)):
     including zone details, seat statuses, and occupancy counts.
     """
     print("DEBUG: seating_routes.py - /arrangement/ route called")
-    if service.USE_DATABASE_SWITCH:
-        raise HTTPException(status_code=501, detail="Database connection not implemented yet.")
-    else:
-        # The service now returns a dict that should match SeatingArrangement
-        raw_arrangement_data = service.get_mock_seating_arrangement_and_assign_employees()
-        # Pydantic will validate this structure against the SeatingArrangement model
-        return SeatingArrangement(**raw_arrangement_data)
+    try:
+        if service.USE_DATABASE_SWITCH:
+            raise HTTPException(status_code=501, detail="Database connection not implemented yet.")
+        else:
+            # The service now returns a dict that should match SeatingArrangement
+            raw_arrangement_data = service.get_mock_seating_arrangement_and_assign_employees()
+            # Pydantic will validate this structure against the SeatingArrangement model
+            return SeatingArrangement(**raw_arrangement_data)
+    except HTTPException as http_exc:
+        raise http_exc  # Known HTTP errors (like 501) are re-raised
 
+    except Exception as e:
+        # Catch and return unexpected internal errors
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @router.get("/suggestions/", response_model=SeatingSuggestion, summary="Get seating optimization suggestions")
 async def get_seating_suggestions_data(service = Depends(get_data_service)):

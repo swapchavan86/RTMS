@@ -61,10 +61,16 @@ const SeatingChart = () => {
       <h2>🪑 Office Seating Arrangement</h2>
       <p>Total Seats: {seatingArrangement.total_seats} | Occupied: {seatingArrangement.occupied_seats} | Unoccupied: {seatingArrangement.unoccupied_seats}</p>
 
-      {suggestions && suggestions.message && (
+      {suggestions?.suggested_moves?.length > 0 && (
         <div className="seating-suggestion-message">
-          <strong>Suggestion:</strong> {suggestions.message}
-          {suggestions.estimated_energy_saving_kwh && <span> (Est. Savings: {suggestions.estimated_energy_saving_kwh} kWh)</span>}
+          <strong>Suggested Moves:</strong>
+          <ul>
+            {suggestions.suggested_moves.map(([empId, toSeatId, savings]) => (
+              <li key={`${empId}-${toSeatId}`}>
+                Move {empId} to {toSeatId} (Est. Savings: {savings} kWh)
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 

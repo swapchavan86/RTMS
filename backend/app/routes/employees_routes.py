@@ -32,14 +32,24 @@ async def read_employee(employee_id: str, service = Depends(get_data_service)):
     """
     Retrieve detailed information for a specific employee by their ID.
     """
-    if service.USE_DATABASE_SWITCH:
-        raise HTTPException(status_code=501, detail="Database connection not implemented yet.")
-    else:
+    try:
+        if service.USE_DATABASE_SWITCH:
+            raise HTTPException(status_code=501, detail="Database connection not implemented yet.")
+
         employees = service.get_mock_employees()
+
         for emp in employees:
             if emp.id == employee_id:
                 return emp
+
         raise HTTPException(status_code=404, detail="Employee not found")
+
+    except HTTPException as http_exc:
+        raise http_exc  # Re-raise known API exceptions
+
+    except Exception as e:
+        # Catch unexpected errors
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @router.get("/leaderboard/", response_model=List[LeaderboardEntry], summary="Get employee leaderboard")
 async def get_leaderboard(limit: int = 10, service = Depends(get_data_service)):
