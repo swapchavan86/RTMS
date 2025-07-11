@@ -4,6 +4,9 @@ This project is a dashboard designed to track office energy usage and CO2 emissi
 
 The application features a frontend built with React and a backend powered by FastAPI. Currently, it uses mock data generated randomly, with a provision to switch to a live database in the future.
 
+## Demo
+https://rtms-frontend.onrender.com/
+
 ## Project Structure
 
 ```
