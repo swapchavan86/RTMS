@@ -42,7 +42,7 @@ ENV PORT=8000
 # --- Common CMD examples ---
 
 # If you are using FastAPI (assuming your FastAPI app instance is named 'app' in 'main.py'):
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "$PORT"]
+CMD uvicorn app.main:app --host 0.0.0.0 --port $PORT
 
 # If you are using Flask (assuming your Flask app object is named 'app' in 'main.py'):
 # If main.py directly runs the Flask app (e.g., app.run()):
