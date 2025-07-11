@@ -2,6 +2,12 @@ fastapi>=0.100.0
 uvicorn[standard]>=0.23.0
 pydantic>=2.0.0
 python-dotenv>=1.0.0 # For managing environment variables if needed later
+
+# Testing
+pytest>=7.0.0
+pytest-cov>=3.0.0
+httpx>=0.24.0 # For testing FastAPI endpoints
+
 # Add other dependencies as they arise, e.g., database drivers
 # numpy # For potential advanced data generation or analysis later
 # pandas # For potential data manipulation if reading CSVs directly in backend later
