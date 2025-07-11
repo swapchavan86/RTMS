@@ -6,10 +6,16 @@ print("DEBUG: main.py - Top of file")
 app = FastAPI(title="Renewable Energy Dashboard API")
 print("DEBUG: main.py - FastAPI app created")
 
+origins = [
+    "http://localhost:3000",  # Your local React development server
+    "http://localhost:5173",  # Another common React/Vite local dev port
+    "https://rtms-frontend.onrender.com", # Your deployed Render frontend URL
+    # "https://rtms-api.onrender.com", # Sometimes needed if your backend also serves a root page that might redirect etc. (less common for API only)
+]
 # Allow CORS for frontend development
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"], # Adjust if your frontend runs on a different port
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
